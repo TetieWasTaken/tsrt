@@ -2,28 +2,7 @@ import fs from "fs";
 import log from "./log";
 import { LOG_LEVEL } from "./constants";
 import { hrtime } from "node:process";
-
-/**
- * Retrieve the algorithm function from the algorithms directory
- * @param algorithm the algorithm name to retrieve
- * @returns the algorithm function
- */
-function findAlgorithm(algorithm: string): Function {
-  log(LOG_LEVEL.DEBUG, `Finding algorithm: ${algorithm}`);
-
-  const files: string[] = fs.readdirSync("./algorithms");
-  // find which file contains the algorithm
-  const file = files.find((f: string) => f.split(".")[0] === algorithm);
-
-  if (!file) {
-    log(LOG_LEVEL.ERROR, `Could not find algorithm: ${algorithm}`);
-    process.exit(1);
-  }
-
-  log(LOG_LEVEL.DEBUG, `Found algorithm: ${algorithm}`);
-
-  return require(`./algorithms/${file}`).default;
-}
+import { findAlgorithm } from "./helpers";
 
 /**
  * Get the data from the specified file
