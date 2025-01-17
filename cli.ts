@@ -1,15 +1,16 @@
-import { Command, Option } from "commander";
+import { Command, Option } from "@commander-js/extra-typings";
 import { getAlgorithms } from "./helpers";
-const program = new Command();
+import { DEFAULT_ALGORITHM } from "./constants";
 
-program
+const program = new Command()
   .version("0.0.1", "-v, --version", "output the current version")
   .addOption(
-    new Option("-a, --algorithm <algorithm>").choices(getAlgorithms()),
+    new Option("-a, --algorithm <algorithm>").choices(getAlgorithms()).default(
+      DEFAULT_ALGORITHM,
+    ),
   );
 
 program.parse();
 
 const options = program.opts();
-const limit = options.first ? 1 : undefined;
-console.log(program.args[0].split(options.separator, limit));
+console.log(options.algorithm);
