@@ -1,4 +1,7 @@
 import fs from "fs";
+import log from "./log";
+import { LOG_LEVEL } from "./constants";
+import { hrtime } from "node:process";
 
 /**
  * Retrieve the algorithm function from the algorithms directory
@@ -6,13 +9,18 @@ import fs from "fs";
  * @returns the algorithm function
  */
 function findAlgorithm(algorithm: string): Function {
+  log(LOG_LEVEL.DEBUG, `Finding algorithm: ${algorithm}`);
+
   const files: string[] = fs.readdirSync("./algorithms");
   // find which file contains the algorithm
   const file = files.find((f: string) => f.split(".")[0] === algorithm);
 
   if (!file) {
-    throw new Error(`Algorithm not found: ${algorithm}`);
+    log(LOG_LEVEL.ERROR, `Could not find algorithm: ${algorithm}`);
+    process.exit(1);
   }
+
+  log(LOG_LEVEL.DEBUG, `Found algorithm: ${algorithm}`);
 
   return require(`./algorithms/${file}`).default;
 }
@@ -23,7 +31,20 @@ function findAlgorithm(algorithm: string): Function {
  * @returns the file contents
  */
 function getData(file: string): string {
-  return fs.readFileSync(file, "utf-8");
+  log(LOG_LEVEL.DEBUG, `Getting data from file: ${file}`);
+  try {
+    fs.accessSync(file, fs.constants.R_OK);
+  } catch (e) {
+    log(LOG_LEVEL.ERROR, `Could not read file: ${file}`);
+    process.exit(1);
+  }
+
+  try {
+    return fs.readFileSync(file, "utf-8");
+  } catch (e) {
+    log(LOG_LEVEL.ERROR, `Could not read file: ${file}`);
+    process.exit(1);
+  }
 }
 
 /**
@@ -41,6 +62,16 @@ export default function sort(algorithm: string, file: string): string[] {
     parseInt(line, 10)
   );
 
+  log(LOG_LEVEL.INFO, `Sorting ${arr.length} elements`);
+
+  const startPerf = hrtime.bigint();
   const sorted: number[] = findAlgorithm(algorithm)(arr);
+  const endPerf = hrtime.bigint() - startPerf;
+
+  log(
+    LOG_LEVEL.INFO,
+    `Sorted ${arr.length} elements in ${Number(endPerf) / 1e6}ms`,
+  );
+
   return sorted.map((num: number) => num.toString());
 }

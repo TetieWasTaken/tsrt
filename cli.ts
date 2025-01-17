@@ -1,8 +1,9 @@
 import { Command, Option } from "@commander-js/extra-typings";
 import { getAlgorithms } from "./helpers";
-import { DEFAULT_ALGORITHM } from "./constants";
+import { DEFAULT_ALGORITHM, LOG_LEVEL } from "./constants";
 import fs from "fs";
 import sort from "./sort";
+import log from "./log";
 
 const program = new Command()
   .version("0.0.1", "-v, --version", "output the current version")
@@ -28,6 +29,7 @@ const program = new Command()
   )
   .action((options, command) => {
     if (!options.file && !options.input) {
+      log(LOG_LEVEL.ERROR, "You cannot specify both a file and input");
       command.help();
     }
   });
@@ -35,9 +37,7 @@ const program = new Command()
 program.parse();
 
 const options = program.opts();
-console.log(options);
 const sorted = sort(options.algorithm, options.file || options.input);
-console.log(sorted);
 
 if (options.output) {
   fs.writeFileSync(options.output, sorted.join("\n"));
