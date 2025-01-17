@@ -1,9 +1,12 @@
-import { program } from "commander";
+import { Command, Option } from "commander";
+import { getAlgorithms } from "./helpers";
+const program = new Command();
 
 program
-  .option("--first")
-  .option("-s, --separator <char>")
-  .argument("<string>");
+  .version("0.0.1", "-v, --version", "output the current version")
+  .addOption(
+    new Option("-a, --algorithm <algorithm>").choices(getAlgorithms()),
+  );
 
 program.parse();
 
