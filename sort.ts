@@ -32,7 +32,7 @@ function getData(file: string): string {
  * @param file the path to the file to sort
  * @returns the sorted file
  */
-export default function sort(algorithm: string, file: string): string {
+export default function sort(algorithm: string, file: string): string[] {
   // get file contents
   const data: string = getData(file);
 
@@ -42,5 +42,5 @@ export default function sort(algorithm: string, file: string): string {
   );
 
   const sorted: number[] = findAlgorithm(algorithm)(arr);
-  return sorted.join("\n");
+  return sorted.map((num: number) => num.toString());
 }

@@ -1,6 +1,7 @@
 import { Command, Option } from "@commander-js/extra-typings";
 import { getAlgorithms } from "./helpers";
 import { DEFAULT_ALGORITHM } from "./constants";
+import fs from "fs";
 import sort from "./sort";
 
 const program = new Command()
@@ -12,9 +13,32 @@ const program = new Command()
       DEFAULT_ALGORITHM,
     ),
   )
-  .argument("<file>", "the file to sort");
+  .addOption(
+    new Option("-f, --file <file>", "the file to sort").conflicts(
+      "input",
+    ),
+  )
+  .addOption(
+    new Option("-i, --input <input>", "the input to sort").conflicts(
+      "file",
+    ),
+  )
+  .addOption(
+    new Option("-o, --output <output>", "the file to write the sorted output"),
+  )
+  .action((options, command) => {
+    if (!options.file && !options.input) {
+      command.help();
+    }
+  });
 
 program.parse();
 
 const options = program.opts();
-console.log(sort(options.algorithm, program.args[0]));
+console.log(options);
+const sorted = sort(options.algorithm, options.file || options.input);
+console.log(sorted);
+
+if (options.output) {
+  fs.writeFileSync(options.output, sorted.join("\n"));
+}
