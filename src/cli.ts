@@ -10,7 +10,7 @@ import { exit } from "node:process";
 const algorithms = getAlgorithms(false);
 
 const program = new Command()
-  .version("1.1.2", "-v, --version", "output the current version")
+  .version("1.1.3", "-v, --version", "output the current version")
   .addOption(
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
