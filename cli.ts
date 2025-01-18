@@ -5,6 +5,7 @@ import fs from "fs";
 import sort from "./sort";
 import log from "./log";
 import { bench } from "./benchmark";
+import { exit } from "node:process";
 
 const algorithms = getAlgorithms();
 
@@ -67,7 +68,7 @@ try {
   program.parse();
 } catch (error) {
   log(LOG_LEVEL.ERROR, error.message);
-  process.exit(1);
+  exit(1);
 }
 
 let options;
@@ -76,7 +77,7 @@ try {
   options = program.opts();
 } catch (error) {
   log(LOG_LEVEL.ERROR, error.message);
-  process.exit(1);
+  exit(1);
 }
 
 try {
@@ -100,5 +101,5 @@ try {
   }
 } catch (error) {
   log(LOG_LEVEL.ERROR, error.message);
-  process.exit(1);
+  exit(1);
 }

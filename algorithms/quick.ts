@@ -1,9 +1,9 @@
 /**
  * Partition the array around the pivot element
  * @param arr the array to partition
- * @param start the start index
- * @param end the end index
- * @returns the index of the pivot element
+ * @param start the start index (default is 0)
+ * @param end the end index (default is arr.length - 1)
+ * @returns {number} the index of the pivot element
  */
 function partition(arr: number[], start: number, end: number): number {
   const pivot = arr[end];
@@ -26,7 +26,7 @@ function partition(arr: number[], start: number, end: number): number {
  * @param arr the array to sort
  * @param start the start index
  * @param end the end index
- * @returns the sorted array
+ * @returns {number[]} the sorted array
  */
 export default function quickSort(
   arr: number[],

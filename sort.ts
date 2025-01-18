@@ -3,6 +3,7 @@ import log from "./log";
 import { LOG_LEVEL } from "./constants";
 import { hrtime } from "node:process";
 import { findAlgorithm } from "./helpers";
+import { exit } from "node:process";
 
 /**
  * Get the data from the specified file
@@ -13,16 +14,16 @@ function getData(file: string): string {
   log(LOG_LEVEL.DEBUG, `Getting data from file: ${file}`);
   try {
     fs.accessSync(file, fs.constants.R_OK);
-  } catch (e) {
-    log(LOG_LEVEL.ERROR, `Could not access file: ${file}`);
-    process.exit(1);
+  } catch (error) {
+    log(LOG_LEVEL.ERROR, `Could not access file: ${file} - ${error.message}`);
+    exit(1);
   }
 
   try {
     return fs.readFileSync(file, "utf-8");
-  } catch (e) {
-    log(LOG_LEVEL.ERROR, `Could not read file: ${file}`);
-    process.exit(1);
+  } catch (error) {
+    log(LOG_LEVEL.ERROR, `Could not read file: ${file} - ${error.message}`);
+    exit(1);
   }
 }
 
@@ -48,8 +49,11 @@ export default function sort(algorithm: string, file: string): string[] {
   try {
     sorted = findAlgorithm(algorithm)(arr);
   } catch (error) {
-    log(LOG_LEVEL.ERROR, `Could not run algorithm: ${algorithm}`);
-    process.exit(1);
+    log(
+      LOG_LEVEL.ERROR,
+      `Could not run algorithm: ${algorithm} - ${error.message}`,
+    );
+    exit(1);
   }
   const endPerf = hrtime.bigint() - startPerf;
 

@@ -6,6 +6,6 @@ export default function log(level: LOG_LEVEL, message: string): void {
     const color = LOG_LEVEL_ANSI_CODES[level];
     console.log(`${color}[${date}] ${level}: ${message}\x1b[0m`);
   } catch (error) {
-    console.warn("Failed to log message");
+    console.warn("Failed to log message", error);
   }
 }

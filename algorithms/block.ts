@@ -1,15 +1,14 @@
 import insertionSort from "./insertion";
 
 /**
- * Merge two sorted arrays
- * @param arr the array to sort
+ * @param arr array of numbers to be merged
  * @param start the start index
  * @param mid the middle index
- * @param end the end index
+ * @param end the ending index of the subarray to be merged
  */
 function merge(arr: number[], start: number, mid: number, end: number): void {
   const left = arr.slice(start, mid + 1);
-  const right = arr.slice(mid + 1, end + 1);
+  const right = mid < end ? arr.slice(mid + 1, end + 1) : [];
   let i = 0, j = 0, k = start;
 
   while (i < left.length && j < right.length) {
@@ -30,21 +29,21 @@ function merge(arr: number[], start: number, mid: number, end: number): void {
 }
 
 /**
- * Sort by diving the input into blocks and sorting them using insertion sort
+ * Sort by dividing the input into blocks, sorting them using insertion sort, and then merging them using the merge sort algorithm
  * @param arr array of numbers to be sorted
- * @returns sorted array
+ * @returns {number[]} the sorted array
  */
 export default function blockSort(arr: number[]): number[] {
   const blockSize = Math.floor(Math.sqrt(arr.length));
 
   for (let i = 0; i < arr.length; i += blockSize) {
-    const end = Math.min(i + blockSize - 1, arr.length - 1);
-    insertionSort(arr, i, end);
+    insertionSort(arr.slice(i, Math.min(i + blockSize, arr.length)));
+    insertionSort(arr, i, Math.min(i + blockSize - 1, arr.length - 1));
   }
 
   let currentBlockSize = blockSize;
   while (currentBlockSize < arr.length) {
-    for (let start = 0; start < arr.length; start += 2 * currentBlockSize) {
+    for (let start = 0; start < arr.length - 1; start += 2 * currentBlockSize) {
       const mid = Math.min(start + currentBlockSize - 1, arr.length - 1);
       const end = Math.min(start + 2 * currentBlockSize - 1, arr.length - 1);
       if (mid < end) {

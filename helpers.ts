@@ -1,6 +1,7 @@
 import fs from "fs";
 import log from "./log";
 import { LOG_LEVEL } from "./constants";
+import { exit } from "node:process";
 
 /**
  * Get a list of available algorithms
@@ -11,8 +12,11 @@ export function getAlgorithms(): string[] {
     const files: string[] = fs.readdirSync("./algorithms");
     return files.map((file: string) => file.split(".")[0]);
   } catch (error) {
-    log(LOG_LEVEL.ERROR, "Could not find algorithms directory");
-    process.exit(1);
+    log(
+      LOG_LEVEL.ERROR,
+      `Could not find algorithms directory: ${error.message}`,
+    );
+    exit(1);
   }
 }
 
@@ -30,7 +34,7 @@ export function getRandoms(size: number): number[] {
  * @param algorithm the algorithm name to retrieve
  * @returns the algorithm function
  */
-export function findAlgorithm(algorithm: string): Function {
+export function findAlgorithm(algorithm: string): (arr: number[]) => number[] {
   log(LOG_LEVEL.DEBUG, `Finding algorithm: ${algorithm}`);
 
   try {
@@ -39,7 +43,7 @@ export function findAlgorithm(algorithm: string): Function {
 
     if (!files.length) {
       log(LOG_LEVEL.ERROR, "No algorithms found");
-      process.exit(1);
+      exit(1);
     }
 
     // find which file contains the algorithm
@@ -47,7 +51,7 @@ export function findAlgorithm(algorithm: string): Function {
 
     if (!file) {
       log(LOG_LEVEL.ERROR, `Could not find algorithm: ${algorithm}`);
-      process.exit(1);
+      exit(1);
     }
 
     log(LOG_LEVEL.DEBUG, `Found algorithm: ${algorithm}`);
@@ -55,7 +59,10 @@ export function findAlgorithm(algorithm: string): Function {
     // return the default export of the file
     return require(`./algorithms/${file}`).default;
   } catch (error) {
-    log(LOG_LEVEL.ERROR, `Could not find algorithm: ${algorithm}`);
-    process.exit(1);
+    log(
+      LOG_LEVEL.ERROR,
+      `Could not find algorithm: ${algorithm} - ${error.message}`,
+    );
+    exit(1);
   }
 }

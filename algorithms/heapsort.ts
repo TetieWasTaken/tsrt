@@ -1,8 +1,8 @@
 /**
- * Heapify a subtree rooted with node i which is an index in arr[]. n is size of heap
- * @param arr the array to heapify
- * @param n the size of the heap
- * @param i the index of the root node
+ * Heapify a subtree rooted with node i which is an index in arr[].
+ * @param arr - the array to heapify
+ * @param n - the size of the heap
+ * @param i - the index of the root node
  */
 function heapify(arr: number[], n: number, i: number) {
   let largest = i;
@@ -24,20 +24,18 @@ function heapify(arr: number[], n: number, i: number) {
 }
 
 /**
- * Sort by creating a max heap and repeatedly extracting the maximum element from the heap
- * @param arr the array to sort
- * @returns the sorted array
+ * Sort by using the heap sort algorithm; it builds a max heap from the input, then repeatedly extracts the maximum element from the heap and places it at the end of the array.
+ * @param arr - the array of numbers to sort.
+ * @returns the sorted array.
  */
 export default function heapSort(arr: number[]): number[] {
   const n: number = arr.length;
 
-  // build max heap
-  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-    heapify(arr, n, i);
-  }
-
-  // extract elements from heap
+  // build max heap and extract elements
   for (let i = n - 1; i > 0; i--) {
+    if (i < Math.floor(n / 2)) {
+      heapify(arr, n, i);
+    }
     [arr[0], arr[i]] = [arr[i], arr[0]];
     heapify(arr, i, 0);
   }

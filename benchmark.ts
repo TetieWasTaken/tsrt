@@ -36,7 +36,7 @@ export function bench(
 
     return {
       algorithm,
-      milliseconds: Number(totalTime) / 1e6,
+      milliseconds: Number(totalTime) / (1e6 * iterations),
     };
   });
 
