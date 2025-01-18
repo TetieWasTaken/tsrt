@@ -10,19 +10,28 @@ import { exit } from "node:process";
  * @param file the path to the file
  * @returns the file contents
  */
-function getData(file: string): string {
-  log(LOG_LEVEL.DEBUG, `Getting data from file: ${file}`);
+export function getData(file: string, plain: boolean): number[] {
+  log(LOG_LEVEL.DEBUG, `Getting data from file: ${file}`, plain);
   try {
     fs.accessSync(file, fs.constants.R_OK);
   } catch (error) {
-    log(LOG_LEVEL.ERROR, `Could not access file: ${file} - ${error.message}`);
+    log(
+      LOG_LEVEL.ERROR,
+      `Could not access file: ${file} - ${error.message}`,
+      plain,
+    );
     exit(1);
   }
 
   try {
-    return fs.readFileSync(file, "utf-8");
+    const data = fs.readFileSync(file, "utf-8");
+    return data.split("\n").map((line: string) => parseInt(line, 10));
   } catch (error) {
-    log(LOG_LEVEL.ERROR, `Could not read file: ${file} - ${error.message}`);
+    log(
+      LOG_LEVEL.ERROR,
+      `Could not read file: ${file} - ${error.message}`,
+      plain,
+    );
     exit(1);
   }
 }
@@ -33,25 +42,22 @@ function getData(file: string): string {
  * @param file the path to the file to sort
  * @returns the sorted file
  */
-export default function sort(algorithm: string, file: string): string[] {
-  // get file contents
-  const data: string = getData(file);
-
-  // parse the data into an array of numbers
-  const arr: number[] = data.split("\n").map((line: string) =>
-    parseInt(line, 10)
-  );
-
-  log(LOG_LEVEL.INFO, `Sorting ${arr.length} elements`);
+export default function sort(
+  algorithm: string,
+  input: number[],
+  plain: boolean,
+): string[] {
+  log(LOG_LEVEL.INFO, `Sorting ${input.length} elements`, plain);
 
   let sorted: number[] = [];
   const startPerf = hrtime.bigint();
   try {
-    sorted = findAlgorithm(algorithm)(arr);
+    sorted = findAlgorithm(algorithm)(input);
   } catch (error) {
     log(
       LOG_LEVEL.ERROR,
       `Could not run algorithm: ${algorithm} - ${error.message}`,
+      plain,
     );
     exit(1);
   }
@@ -59,7 +65,8 @@ export default function sort(algorithm: string, file: string): string[] {
 
   log(
     LOG_LEVEL.INFO,
-    `Sorted ${arr.length} elements in ${Number(endPerf) / 1e6}ms`,
+    `Sorted ${input.length} elements in ${Number(endPerf) / 1e6}ms`,
+    plain,
   );
 
   return sorted.map((num: number) => num.toString());

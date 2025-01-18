@@ -28,6 +28,7 @@ export function bench(
   iterations: number = 15,
   size: number = 10000,
 ) {
+  // todo: also iterate through different random lists, as another iteration
   const randoms = getRandoms(size);
 
   log(

@@ -37,7 +37,6 @@ export default function blockSort(arr: number[]): number[] {
   const blockSize = Math.floor(Math.sqrt(arr.length));
 
   for (let i = 0; i < arr.length; i += blockSize) {
-    insertionSort(arr.slice(i, Math.min(i + blockSize, arr.length)));
     insertionSort(arr, i, Math.min(i + blockSize - 1, arr.length - 1));
   }
 

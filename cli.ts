@@ -2,7 +2,7 @@ import { Command, Option } from "@commander-js/extra-typings";
 import { getAlgorithms } from "./helpers";
 import { DEFAULT_ALGORITHM, LOG_LEVEL } from "./constants";
 import fs from "fs";
-import sort from "./sort";
+import sort, { getData } from "./sort";
 import log from "./log";
 import { bench } from "./benchmark";
 import { exit } from "node:process";
@@ -52,6 +52,12 @@ const program = new Command()
       "the size of the random list to benchmark",
     ).hideHelp(),
   )
+  .addOption(
+    new Option(
+      "-p, --plain",
+      "do not use formatting for output",
+    ).hideHelp().default(false),
+  )
   .action((options, command) => {
     if (
       !options.file && !options.input && !options.benchmark
@@ -59,6 +65,7 @@ const program = new Command()
       log(
         LOG_LEVEL.ERROR,
         "You must specify either a file, input, or a benchmark option",
+        options.plain,
       );
       command.help();
     }
@@ -67,7 +74,7 @@ const program = new Command()
 try {
   program.parse();
 } catch (error) {
-  log(LOG_LEVEL.ERROR, error.message);
+  log(LOG_LEVEL.ERROR, error.message, false);
   exit(1);
 }
 
@@ -76,7 +83,7 @@ let options: ReturnType<typeof program.opts>;
 try {
   options = program.opts();
 } catch (error) {
-  log(LOG_LEVEL.ERROR, error.message);
+  log(LOG_LEVEL.ERROR, error.message, false);
   exit(1);
 }
 
@@ -91,15 +98,24 @@ try {
     const algorithm = options.algorithm == "none"
       ? DEFAULT_ALGORITHM
       : options.algorithm;
-    const sorted = sort(algorithm, options.file || options.input);
+
+    const input = options.file
+      ? getData(options.file, options.plain)
+      : options.input.split(",").map((num: string) => parseInt(num, 10));
+    const sorted = sort(algorithm, input, options.plain);
 
     if (options.output) {
-      fs.writeFileSync(options.output, sorted.join("\n"));
+      fs.writeFileSync(
+        options.output,
+        options.plain ? sorted.join(",") : sorted.join("\n"),
+      );
     } else {
-      console.log(sorted.join("\n"));
+      options.plain
+        ? console.log(sorted.join(","))
+        : console.log(sorted.join("\n"));
     }
   }
 } catch (error) {
-  log(LOG_LEVEL.ERROR, error.message);
+  log(LOG_LEVEL.ERROR, error.message, options.plain);
   exit(1);
 }
