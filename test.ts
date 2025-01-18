@@ -101,7 +101,6 @@ test("CLI: correct sort output", () => {
   const expected = fs.readFileSync("sorted.txt", "utf-8").trim();
 
   for (const algorithm of algorithms) {
-    console.warn(`Testing algorithm: ${algorithm}`);
     execSync(
       `npx tsx ${cliPath} --algorithm ${algorithm} -f unsorted.txt -o output.txt`,
       { encoding: "utf8" },

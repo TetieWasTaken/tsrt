@@ -116,5 +116,6 @@ export function bench(
     "Median (ms)": result.medianTime.toPrecision(5),
     "Std Dev (ms)": result.stdDeviation.toPrecision(5),
     "Range (ms)": (result.maxTime - result.minTime).toPrecision(5),
+    "ms/element": (result.averageTime / size).toPrecision(5),
   })));
 }
