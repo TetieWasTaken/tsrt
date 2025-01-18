@@ -31,11 +31,13 @@ function heapify(arr: number[], n: number, i: number) {
 export default function heapSort(arr: number[]): number[] {
   const n: number = arr.length;
 
-  // build max heap and extract elements
+  // build max heap
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    heapify(arr, n, i);
+  }
+
+  // extract elements from heap
   for (let i = n - 1; i > 0; i--) {
-    if (i < Math.floor(n / 2)) {
-      heapify(arr, n, i);
-    }
     [arr[0], arr[i]] = [arr[i], arr[0]];
     heapify(arr, i, 0);
   }

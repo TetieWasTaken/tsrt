@@ -4,7 +4,7 @@
  * @param right the right array
  * @returns the merged array
  */
-function merge(left: number[], right: number[]): number[] {
+export function merge(left: number[], right: number[]): number[] {
   const result: number[] = [];
   let leftIndex = 0;
   let rightIndex = 0;
@@ -27,8 +27,8 @@ function merge(left: number[], right: number[]): number[] {
  * @param arr the array to sort
  * @returns the sorted array
  */
-export default function mergeSort(arr: number[]): number[] {
-  if (arr.length <= 1) {
+export default function mergeSort(arr: number[], minRun: number = 1): number[] {
+  if (arr.length <= minRun) {
     return arr;
   }
 

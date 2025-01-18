@@ -3,6 +3,8 @@ import assert from "node:assert";
 import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
+import { getAlgorithms } from "./helpers";
+import { getData } from "./sort";
 
 const cliPath = path.resolve("./cli.ts");
 
@@ -88,6 +90,26 @@ test("CLI: conflicting options", () => {
       error.stderr,
       /error: option '-f, --file <file>' cannot be used with option '-i, --input <input>'\n/,
       "Error message should indicate conflicting options",
+    );
+  }
+});
+
+test("CLI: correct sort output", () => {
+  // Loop through every algorithm in getAlgorithms() and check if the output is sorted by comparing it to sorted.txt
+  const algorithms = getAlgorithms();
+
+  const expected = fs.readFileSync("sorted.txt", "utf-8").trim();
+
+  for (const algorithm of algorithms) {
+    execSync(
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f unsorted.txt -o output.txt`,
+      { encoding: "utf8" },
+    );
+    const actual = fs.readFileSync("output.txt", "utf-8").trim();
+    assert.strictEqual(
+      actual,
+      expected,
+      `Output should be sorted for algorithm: ${algorithm}`,
     );
   }
 });
