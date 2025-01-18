@@ -17,3 +17,5 @@ export const LOG_LEVEL_ANSI_CODES: { [key in LOG_LEVEL]: string } = {
   [LOG_LEVEL.INFO]: "\x1b[32m",
   [LOG_LEVEL.DEBUG]: "\x1b[34m",
 };
+
+export const IGNORED_ALGORITHMS: string[] = ["insertion", "tim", "selection"];

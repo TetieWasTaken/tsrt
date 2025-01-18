@@ -42,12 +42,14 @@ export default function blockSort(arr: number[]): number[] {
 
   let currentBlockSize = blockSize;
   while (currentBlockSize < arr.length) {
-    for (let start = 0; start < arr.length - 1; start += 2 * currentBlockSize) {
-      const mid = Math.min(start + currentBlockSize - 1, arr.length - 1);
+    for (
+      let start = 0;
+      start + currentBlockSize < arr.length;
+      start += 2 * currentBlockSize
+    ) {
+      const mid = start + currentBlockSize - 1;
       const end = Math.min(start + 2 * currentBlockSize - 1, arr.length - 1);
-      if (mid < end) {
-        merge(arr, start, mid, end);
-      }
+      merge(arr, start, mid, end);
     }
     currentBlockSize *= 2;
   }

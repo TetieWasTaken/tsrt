@@ -42,7 +42,7 @@ export function bench(
   );
 
   const results = algorithms.map((algorithm) => {
-    const sort = findAlgorithm(algorithm);
+    const sort = findAlgorithm(algorithm, plain);
 
     let totalTime = 0n;
     let minTime = BigInt(Number.MAX_SAFE_INTEGER);

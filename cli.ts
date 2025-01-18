@@ -7,7 +7,7 @@ import log from "./log";
 import { bench } from "./benchmark";
 import { exit } from "node:process";
 
-const algorithms = getAlgorithms();
+const algorithms = getAlgorithms(false);
 
 const program = new Command()
   .version("0.1.0", "-v, --version", "output the current version")

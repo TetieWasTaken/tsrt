@@ -33,8 +33,8 @@ export default function mergeSort(arr: number[], minRun: number = 1): number[] {
   }
 
   const mid = Math.floor(arr.length / 2);
-  const left = mergeSort(arr.slice(0, mid));
-  const right = mergeSort(arr.slice(mid));
+  const left = mergeSort(arr.slice(0, mid), minRun);
+  const right = mergeSort(arr.slice(mid), minRun);
 
   return merge(left, right);
 }

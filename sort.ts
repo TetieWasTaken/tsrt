@@ -52,7 +52,7 @@ export default function sort(
   let sorted: number[] = [];
   const startPerf = hrtime.bigint();
   try {
-    sorted = findAlgorithm(algorithm)(input);
+    sorted = findAlgorithm(algorithm, plain)(input);
   } catch (error) {
     log(
       LOG_LEVEL.ERROR,

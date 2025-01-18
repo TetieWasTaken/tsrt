@@ -1,20 +1,27 @@
 import fs from "fs";
 import log from "./log";
-import { LOG_LEVEL } from "./constants";
+import { IGNORED_ALGORITHMS, LOG_LEVEL } from "./constants";
 import { exit } from "node:process";
 
 /**
  * Get a list of available algorithms
  * @returns list of available algorithms
  */
-export function getAlgorithms(): string[] {
+export function getAlgorithms(plain: boolean): string[] {
   try {
     const files: string[] = fs.readdirSync("./algorithms");
-    return files.map((file: string) => file.split(".")[0]);
+    return files.map((f: string) => f.split(".")[0]).filter((f: string) => {
+      if (IGNORED_ALGORITHMS.includes(f)) {
+        log(LOG_LEVEL.DEBUG, `Ignoring algorithm: ${f}`, plain);
+        return false;
+      }
+      return true;
+    });
   } catch (error) {
     log(
       LOG_LEVEL.ERROR,
       `Could not find algorithms directory: ${error.message}`,
+      plain,
     );
     exit(1);
   }
@@ -34,15 +41,18 @@ export function getRandoms(size: number): number[] {
  * @param algorithm the algorithm name to retrieve
  * @returns the algorithm function
  */
-export function findAlgorithm(algorithm: string): (arr: number[]) => number[] {
-  log(LOG_LEVEL.DEBUG, `Finding algorithm: ${algorithm}`);
+export function findAlgorithm(
+  algorithm: string,
+  plain: boolean,
+): (arr: number[]) => number[] {
+  log(LOG_LEVEL.DEBUG, `Finding algorithm: ${algorithm}`, plain);
 
   try {
     // get all files in the algorithms directory
     const files: string[] = fs.readdirSync("./algorithms");
 
     if (!files.length) {
-      log(LOG_LEVEL.ERROR, "No algorithms found");
+      log(LOG_LEVEL.ERROR, "No algorithms found", plain);
       exit(1);
     }
 
@@ -50,11 +60,11 @@ export function findAlgorithm(algorithm: string): (arr: number[]) => number[] {
     const file = files.find((f: string) => f.split(".")[0] === algorithm);
 
     if (!file) {
-      log(LOG_LEVEL.ERROR, `Could not find algorithm: ${algorithm}`);
+      log(LOG_LEVEL.ERROR, `Could not find algorithm: ${algorithm}`, plain);
       exit(1);
     }
 
-    log(LOG_LEVEL.DEBUG, `Found algorithm: ${algorithm}`);
+    log(LOG_LEVEL.DEBUG, `Found algorithm: ${algorithm}`, plain);
 
     // return the default export of the file
     return require(`./algorithms/${file}`).default;
@@ -62,6 +72,7 @@ export function findAlgorithm(algorithm: string): (arr: number[]) => number[] {
     log(
       LOG_LEVEL.ERROR,
       `Could not find algorithm: ${algorithm} - ${error.message}`,
+      plain,
     );
     exit(1);
   }

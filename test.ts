@@ -96,11 +96,12 @@ test("CLI: conflicting options", () => {
 
 test("CLI: correct sort output", () => {
   // Loop through every algorithm in getAlgorithms() and check if the output is sorted by comparing it to sorted.txt
-  const algorithms = getAlgorithms();
+  const algorithms = getAlgorithms(true);
 
   const expected = fs.readFileSync("sorted.txt", "utf-8").trim();
 
   for (const algorithm of algorithms) {
+    console.warn(`Testing algorithm: ${algorithm}`);
     execSync(
       `npx tsx ${cliPath} --algorithm ${algorithm} -f unsorted.txt -o output.txt`,
       { encoding: "utf8" },

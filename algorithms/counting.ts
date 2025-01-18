@@ -4,14 +4,21 @@
  * @returns the sorted array.
  */
 export default function countingSort(arr: number[]): number[] {
-  const max = Math.max(...arr);
-  const count = Array(max + 1).fill(0);
-  const sorted: number[] = [];
+  if (arr.length === 0) return [];
 
+  let max = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > max) {
+      max = arr[i];
+    }
+  }
+
+  const count = Array(max + 1).fill(0);
   for (let i = 0; i < arr.length; i++) {
     count[arr[i]]++;
   }
 
+  const sorted: number[] = [];
   for (let i = 0; i < count.length; i++) {
     while (count[i] > 0) {
       sorted.push(i);

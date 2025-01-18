@@ -4,8 +4,14 @@
  * @returns {number[]} the sorted array
  */
 export default function radixSort(arr: number[]): number[] {
-  const max = Math.max(...arr);
-  const maxDigits = max.toString().length;
+  if (arr.length === 0) return arr;
+  let max = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > max) {
+      max = arr[i];
+    }
+  }
+  const maxDigits = Math.floor(Math.log10(max)) + 1;
 
   for (let i = 0; i < maxDigits; i++) {
     const buckets: number[][] = Array.from({ length: 10 }, () => []);
@@ -16,7 +22,10 @@ export default function radixSort(arr: number[]): number[] {
       buckets[digit].push(num);
     }
 
-    arr = buckets.flat();
+    arr = [];
+    for (const bucket of buckets) {
+      arr = arr.concat(bucket);
+    }
   }
 
   return arr;

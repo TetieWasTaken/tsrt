@@ -34,7 +34,7 @@ function mergeRuns(runs: number[][]): number[] {
     runs.push(merge(left, right));
   }
 
-  return runs[0];
+  return runs.length > 0 ? runs[0] : [];
 }
 
 /**
@@ -43,9 +43,7 @@ function mergeRuns(runs: number[][]): number[] {
  * @returns {number[]} the sorted array
  */
 export default function timSort(arr: number[]): number[] {
-  const minRun = 32;
-
   const runs = findRuns(arr);
-  const sortedRuns = runs.map((run: number[]) => mergeSort(run, minRun));
+  const sortedRuns = runs.map((run: number[]) => mergeSort(run, 32));
   return mergeRuns(sortedRuns);
 }

@@ -33,6 +33,10 @@ export default function quickSort(
   start: number = 0,
   end: number = arr.length - 1,
 ): number[] {
+  if (arr.length === 0) {
+    return arr;
+  }
+
   if (start < end) {
     const pivotIndex = partition(arr, start, end);
     quickSort(arr, start, pivotIndex - 1);
