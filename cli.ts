@@ -14,7 +14,7 @@ const program = new Command()
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
     ).default(
-      DEFAULT_ALGORITHM,
+      "none",
     ),
   )
   .addOption(
@@ -31,20 +31,33 @@ const program = new Command()
     new Option("-o, --output <output>", "the file to write the sorted output"),
   )
   .addOption(
-    new Option("-b, --benchmark", "benchmark the algorithm").conflicts(
-      ["file", "input", "benchmarkAll"],
-    ),
+    new Option(
+      "-b, --benchmark",
+      "benchmark the selected (-a) algorithm, or all algorithms if none is selected",
+    )
+      .conflicts(
+        ["file", "input", "benchmarkAll"],
+      ),
   )
   .addOption(
-    new Option("--benchmark-all", "benchmark all algorithms").conflicts(
-      ["file", "input, benchmark"],
-    ),
+    new Option(
+      "--benchmark-iterations <iterations>",
+      "the number of iterations to benchmark",
+    ).hideHelp(),
+  )
+  .addOption(
+    new Option(
+      "--benchmark-size <size>",
+      "the size of the random list to benchmark",
+    ).hideHelp(),
   )
   .action((options, command) => {
-    if (!options.file && !options.input && !options.benchmarkAll) {
+    if (
+      !options.file && !options.input && !options.benchmark
+    ) {
       log(
         LOG_LEVEL.ERROR,
-        "You must specify either a file, input, or benchmark all",
+        "You must specify either a file, input, or a benchmark option",
       );
       command.help();
     }
@@ -54,16 +67,19 @@ program.parse();
 
 const options = program.opts();
 
-if (options.benchmarkAll) {
-  log(LOG_LEVEL.INFO, "Benchmarking all algorithms");
-  bench(algorithms);
-} else if (options.benchmark) {
-  log(LOG_LEVEL.INFO, `Benchmarking algorithm: ${options.algorithm}`);
-  bench([options.algorithm]);
-}
+if (options.benchmark) {
+  bench(
+    options.algorithm == "none" ? algorithms : [options.algorithm],
+    Number(options.benchmarkIterations) || undefined,
+    Number(options.benchmarkSize) || undefined,
+  );
+} else {
+  const algorithm = options.algorithm == "none"
+    ? DEFAULT_ALGORITHM
+    : options.algorithm;
+  const sorted = sort(algorithm, options.file || options.input);
 
-const sorted = sort(options.algorithm, options.file || options.input);
-
-if (options.output) {
-  fs.writeFileSync(options.output, sorted.join("\n"));
+  if (options.output) {
+    fs.writeFileSync(options.output, sorted.join("\n"));
+  }
 }

@@ -1,28 +1,50 @@
 import { findAlgorithm, getRandoms } from "./helpers";
 import { hrtime } from "node:process";
+import log from "./log";
+import { LOG_LEVEL } from "./constants";
 
-export function bench(algorithms: string[]) {
-  const randoms = getRandoms(10000);
+export function bench(
+  algorithms: string[],
+  iterations: number = 5,
+  size: number = 10000,
+) {
+  const randoms = getRandoms(size);
+
+  log(
+    LOG_LEVEL.INFO,
+    `Benchmarking ${
+      algorithms.join(", ")
+    } with ${size} elements and ${iterations} iterations`,
+  );
 
   const results = algorithms.map((algorithm) => {
+    log(LOG_LEVEL.INFO, `Benchmarking algorithm: ${algorithm}`);
     const sort = findAlgorithm(algorithm);
-    let totalTime = [0, 0];
 
-    for (let i = 0; i < 5; i++) {
-      const start = hrtime();
-      sort([...randoms]); // Use a copy of the array to ensure consistency
-      const end = hrtime(start);
-      totalTime[0] += end[0];
-      totalTime[1] += end[1];
+    let totalTime = 0n;
+
+    for (let i = 0; i < iterations; i++) {
+      const start = hrtime.bigint();
+      sort([...randoms]);
+      const end = hrtime.bigint();
+      totalTime = totalTime + (end - start);
+      log(
+        LOG_LEVEL.DEBUG,
+        `Iteration ${i + 1} took ${Number(end - start) / 1e6}ms`,
+      );
     }
 
-    const averageTime = [totalTime[0] / 5, totalTime[1] / 5];
     return {
       algorithm,
-      seconds: averageTime[0],
-      nanoseconds: averageTime[1],
+      milliseconds: Number(totalTime) / 1e6,
     };
   });
 
-  console.table(results);
+  // would be funny to sort with the fastest algorithm from the bench
+  results.sort((a, b) => a.milliseconds - b.milliseconds);
+
+  console.table(results.map((result) => ({
+    Algorithm: result.algorithm,
+    "Average (ms)": result.milliseconds,
+  })));
 }

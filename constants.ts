@@ -1,4 +1,5 @@
-export const DEFAULT_ALGORITHM: string = "bubble";
+// block is stable and is overall the best afaik
+export const DEFAULT_ALGORITHM: string = "block";
 export enum LOG_LEVEL {
   INFO = "INFO",
   DEBUG = "DEBUG",
