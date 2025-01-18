@@ -10,7 +10,7 @@ import { exit } from "node:process";
  * @param file the path to the file
  * @returns the file contents
  */
-export function getData(file: string, plain: boolean): number[] {
+export function getData(file: string, plain: boolean): string[] {
   log(LOG_LEVEL.DEBUG, `Getting data from file: ${file}`, plain);
   try {
     fs.accessSync(file, fs.constants.R_OK);
@@ -24,8 +24,7 @@ export function getData(file: string, plain: boolean): number[] {
   }
 
   try {
-    const data = fs.readFileSync(file, "utf-8");
-    return data.split("\n").map((line: string) => parseInt(line, 10));
+    return fs.readFileSync(file, "utf-8").split("\n");
   } catch (error) {
     log(
       LOG_LEVEL.ERROR,
@@ -44,12 +43,12 @@ export function getData(file: string, plain: boolean): number[] {
  */
 export default function sort(
   algorithm: string,
-  input: number[],
+  input: (string | number)[],
   plain: boolean,
 ): string[] {
   log(LOG_LEVEL.INFO, `Sorting ${input.length} elements`, plain);
 
-  let sorted: number[] = [];
+  let sorted: (string | number)[] = [];
   const startPerf = hrtime.bigint();
   try {
     sorted = findAlgorithm(algorithm, plain)(input);
@@ -69,5 +68,5 @@ export default function sort(
     plain,
   );
 
-  return sorted.map((num: number) => num.toString());
+  return sorted.map((s: string | number) => s.toString());
 }

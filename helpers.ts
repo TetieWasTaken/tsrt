@@ -27,6 +27,16 @@ export function getAlgorithms(plain: boolean): string[] {
   }
 }
 
+export function convertToNumbers(input: string[]): (string | number)[] {
+  return input.map((i: string) => {
+    if (isNaN(Number(i))) {
+      return i;
+    }
+
+    return Number(i);
+  });
+}
+
 /**
  * Get a list of random numbers
  * @param size the size of the list
@@ -44,7 +54,7 @@ export function getRandoms(size: number): number[] {
 export function findAlgorithm(
   algorithm: string,
   plain: boolean,
-): (arr: number[]) => number[] {
+): (arr: (number | string)[]) => (number | string)[] {
   log(LOG_LEVEL.DEBUG, `Finding algorithm: ${algorithm}`, plain);
 
   try {
@@ -76,4 +86,17 @@ export function findAlgorithm(
     );
     exit(1);
   }
+}
+
+/**
+ * Custom comparator for mixed strings and numbers
+ */
+export function compare(a: string | number, b: string | number): number {
+  if (typeof a === "number" && typeof b === "number") {
+    return a - b;
+  }
+  if (typeof a === "string" && typeof b === "string") {
+    return a.localeCompare(b);
+  }
+  return typeof a === "number" ? -1 : 1; // Numbers come before strings
 }

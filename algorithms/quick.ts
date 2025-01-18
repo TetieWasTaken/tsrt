@@ -1,3 +1,5 @@
+import { compare } from "../helpers";
+
 /**
  * Partition the array around the pivot element
  * @param arr the array to partition
@@ -5,12 +7,16 @@
  * @param end the end index (default is arr.length - 1)
  * @returns {number} the index of the pivot element
  */
-function partition(arr: number[], start: number, end: number): number {
+function partition<T extends string | number>(
+  arr: T[],
+  start: number,
+  end: number,
+): number {
   const pivot = arr[end];
   let i = start - 1;
 
   for (let j = start; j < end; j++) {
-    if (arr[j] < pivot) {
+    if (compare(arr[j], pivot) < 0) {
       i++;
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
@@ -26,13 +32,13 @@ function partition(arr: number[], start: number, end: number): number {
  * @param arr the array to sort
  * @param start the start index
  * @param end the end index
- * @returns {number[]} the sorted array
+ * @returns {T[]} the sorted array
  */
-export default function quickSort(
-  arr: number[],
+export default function quickSort<T extends string | number>(
+  arr: T[],
   start: number = 0,
   end: number = arr.length - 1,
-): number[] {
+): T[] {
   if (arr.length === 0) {
     return arr;
   }

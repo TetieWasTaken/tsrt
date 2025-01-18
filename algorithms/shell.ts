@@ -1,9 +1,13 @@
+import { compare } from "../helpers";
+
 /**
  * Sort by comparing elements that are a certain distance apart and then reducing the distance
  * @param arr the array to sort
- * @returns {number[]} the sorted array
+ * @returns {(number[] | string[])} the sorted array
  */
-export default function shellSort(arr: number[]): number[] {
+export default function shellSort(
+  arr: (number | string)[],
+): (number | string)[] {
   let gap = Math.floor(arr.length / 2);
 
   while (gap > 0) {
@@ -11,7 +15,7 @@ export default function shellSort(arr: number[]): number[] {
       const temp = arr[i];
       let j = i;
 
-      while (j >= gap && arr[j - gap] > temp) {
+      while (j >= gap && compare(arr[j - gap], temp) > 0) {
         arr[j] = arr[j - gap];
         j -= gap;
       }

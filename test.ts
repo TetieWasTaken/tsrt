@@ -9,6 +9,7 @@ import { getData } from "./sort";
 const cliPath = path.resolve("./cli.ts");
 
 test("CLI: --version flag", () => {
+  console.log(`npx tsx ${cliPath} --version`);
   const output = execSync(`npx tsx ${cliPath} --version`, { encoding: "utf8" });
   assert.match(
     output,
@@ -18,6 +19,7 @@ test("CLI: --version flag", () => {
 });
 
 test("CLI: missing required options", () => {
+  console.log(`npx tsx ${cliPath}`);
   const output = execSync(`npx tsx ${cliPath}`, {
     encoding: "utf8",
     stdio: "pipe",
@@ -31,6 +33,7 @@ test("CLI: missing required options", () => {
 });
 
 test("CLI: sorting with input option", () => {
+  console.log(`npx tsx ${cliPath} --algorithm quick --input "3,1,2" -p`);
   const output = execSync(
     `npx tsx ${cliPath} --algorithm quick --input "3,1,2" -p`,
     { encoding: "utf8" },
@@ -47,6 +50,9 @@ test("CLI: sorting with file option", () => {
   const outputFilePath = "./test_output.txt";
   fs.writeFileSync(inputFilePath, "3\n1\n2");
   try {
+    console.log(
+      `npx tsx ${cliPath} --algorithm quick --file ${inputFilePath} --output ${outputFilePath} -p`,
+    );
     execSync(
       `npx tsx ${cliPath} --algorithm quick --file ${inputFilePath} --output ${outputFilePath} -p`,
     );
@@ -64,6 +70,7 @@ test("CLI: sorting with file option", () => {
 
 test("CLI: invalid algorithm", () => {
   try {
+    console.log(`npx tsx ${cliPath} --algorithm invalid --input "1,2,3"`);
     execSync(`npx tsx ${cliPath} --algorithm invalid --input "1,2,3"`, {
       encoding: "utf8",
       stdio: "pipe",
@@ -80,6 +87,7 @@ test("CLI: invalid algorithm", () => {
 
 test("CLI: conflicting options", () => {
   try {
+    console.log(`npx tsx ${cliPath} --file input.txt --input "1,2,3"`);
     execSync(`npx tsx ${cliPath} --file input.txt --input "1,2,3"`, {
       encoding: "utf8",
       stdio: "pipe",
@@ -94,15 +102,19 @@ test("CLI: conflicting options", () => {
   }
 });
 
-test("CLI: correct sort output", () => {
-  // Loop through every algorithm in getAlgorithms() and check if the output is sorted by comparing it to sorted.txt
+test("CLI: correct sort output mixed", () => {
+  // Loop through every algorithm in getAlgorithms() and check if the output is sorted by comparing it to sorted_mixed.txt
   const algorithms = getAlgorithms(true);
 
-  const expected = fs.readFileSync("sorted.txt", "utf-8").trim();
+  const expected = fs.readFileSync("./examples/mixed/mixed_sorted.txt", "utf-8")
+    .trim();
 
   for (const algorithm of algorithms) {
+    console.log(
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f ./examples/mixed/mixed_unsorted.txt -o ./output.txt`,
+    );
     execSync(
-      `npx tsx ${cliPath} --algorithm ${algorithm} -f unsorted.txt -o output.txt`,
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f ./examples/mixed/mixed_unsorted.txt -o ./output.txt`,
       { encoding: "utf8" },
     );
     const actual = fs.readFileSync("output.txt", "utf-8").trim();
@@ -111,5 +123,62 @@ test("CLI: correct sort output", () => {
       expected,
       `Output should be sorted for algorithm: ${algorithm}`,
     );
+
+    fs.unlinkSync("output.txt");
+  }
+});
+
+test("CLI: correct sort output 100k", () => {
+  // Loop through every algorithm in getAlgorithms() and check if the output is sorted by comparing it to sorted.txt
+  const algorithms = getAlgorithms(true);
+
+  const expected = fs.readFileSync("./examples/100k/100k_sorted.txt", "utf-8")
+    .trim();
+
+  for (const algorithm of algorithms) {
+    console.log(
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f ./examples/100k/100k_unsorted.txt -o ./output.txt`,
+    );
+    execSync(
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f ./examples/100k/100k_unsorted.txt -o ./output.txt`,
+      { encoding: "utf8" },
+    );
+    const actual = fs.readFileSync("output.txt", "utf-8").trim();
+    assert.strictEqual(
+      actual,
+      expected,
+      `Output should be sorted for algorithm: ${algorithm}`,
+    );
+
+    fs.unlinkSync("output.txt");
+  }
+});
+
+test("CLI: correct sort output strings", () => {
+  // Loop through every algorithm in getAlgorithms() and check if the output is sorted by comparing it to sorted_strings.txt
+  const algorithms = getAlgorithms(true);
+
+  const expected = fs.readFileSync(
+    "./examples/strings/string_sorted.txt",
+    "utf-8",
+  )
+    .trim();
+
+  for (const algorithm of algorithms) {
+    console.log(
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f ./examples/strings/string_unsorted.txt -o ./output.txt`,
+    );
+    execSync(
+      `npx tsx ${cliPath} --algorithm ${algorithm} -f ./examples/strings/string_unsorted.txt -o ./output.txt`,
+      { encoding: "utf8" },
+    );
+    const actual = fs.readFileSync("output.txt", "utf-8").trim();
+    assert.strictEqual(
+      actual,
+      expected,
+      `Output should be sorted for algorithm: ${algorithm}`,
+    );
+
+    fs.unlinkSync("output.txt");
   }
 });

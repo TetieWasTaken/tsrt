@@ -1,9 +1,13 @@
+import { compare } from "../helpers";
+
 /**
  * Sort by comparing elements that are a certain distance apart and then reducing the distance
- * @param {number[]} arr - the array of numbers to be sorted.
- * @returns {number[]} - the sorted array.
+ * @param {(number|string)[]} arr - the array of numbers or strings to be sorted.
+ * @returns {(number|string)[]} - the sorted array.
  */
-export default function combSort(arr: number[]): number[] {
+export default function combSort(
+  arr: (number | string)[],
+): (number | string)[] {
   const shrinkFactor = 1.3;
   let gap = arr.length;
   let swapped = true;
@@ -13,7 +17,7 @@ export default function combSort(arr: number[]): number[] {
     swapped = false;
 
     for (let i = 0; i + gap < arr.length; i++) {
-      if (arr[i] > arr[i + gap]) {
+      if (compare(arr[i], arr[i + gap]) > 0) {
         [arr[i], arr[i + gap]] = [arr[i + gap], arr[i]];
         swapped = true;
       }

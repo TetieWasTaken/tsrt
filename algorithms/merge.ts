@@ -1,16 +1,19 @@
+import { compare } from "../helpers";
+
 /**
  * Merge two sorted arrays
  * @param left the left array
  * @param right the right array
  * @returns the merged array
  */
-export function merge(left: number[], right: number[]): number[] {
-  const result: number[] = [];
+export function merge<T extends string | number>(left: T[], right: T[]): T[] {
+  const result: T[] = [];
   let leftIndex = 0;
   let rightIndex = 0;
 
+  // Use the custom compare function
   while (leftIndex < left.length && rightIndex < right.length) {
-    if (left[leftIndex] < right[rightIndex]) {
+    if (compare(left[leftIndex], right[rightIndex]) < 0) {
       result.push(left[leftIndex]);
       leftIndex++;
     } else {
@@ -23,11 +26,14 @@ export function merge(left: number[], right: number[]): number[] {
 }
 
 /**
- * Sort an array by recursively splitting it into two halves, sorting the halves, and merging
+ * Sort an array by recursively splitting it into two halves, sorting the halves, and merging them.
  * @param arr the array to sort
  * @returns the sorted array
  */
-export default function mergeSort(arr: number[], minRun: number = 1): number[] {
+export default function mergeSort<T extends string | number>(
+  arr: T[],
+  minRun: number = 1,
+): T[] {
   if (arr.length <= minRun) {
     return arr;
   }

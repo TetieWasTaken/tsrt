@@ -1,5 +1,5 @@
 import { Command, Option } from "@commander-js/extra-typings";
-import { getAlgorithms } from "./helpers";
+import { convertToNumbers, getAlgorithms } from "./helpers";
 import { DEFAULT_ALGORITHM, LOG_LEVEL } from "./constants";
 import fs from "fs";
 import sort, { getData } from "./sort";
@@ -102,8 +102,19 @@ try {
 
     const input = options.file
       ? getData(options.file, options.plain)
-      : options.input?.split(",").map((num: string) => parseInt(num, 10)) || [];
-    const sorted = sort(algorithm, input, options.plain);
+      : options.input?.split(",");
+
+    if (!input) {
+      log(
+        LOG_LEVEL.ERROR,
+        "Could not get input data",
+        options.plain,
+      );
+      exit(1);
+    }
+
+    const convertedInput = convertToNumbers(input);
+    const sorted = sort(algorithm, convertedInput, options.plain);
 
     if (options.output) {
       fs.writeFileSync(
