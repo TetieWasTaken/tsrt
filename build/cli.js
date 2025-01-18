@@ -11,7 +11,7 @@ var benchmark_1 = require("./benchmark");
 var node_process_1 = require("node:process");
 var algorithms = (0, helpers_1.getAlgorithms)(false);
 var program = new extra_typings_1.Command()
-    .version("1.0.3", "-v, --version", "output the current version")
+    .version("1.0.4", "-v, --version", "output the current version")
     .addOption(new extra_typings_1.Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(algorithms).default("none"))
     .addOption(new extra_typings_1.Option("-f, --file <file>", "the file to sort").conflicts("input"))
     .addOption(new extra_typings_1.Option("-i, --input <input>", "the input to sort").conflicts("file"))
@@ -23,7 +23,6 @@ var program = new extra_typings_1.Command()
     .addOption(new extra_typings_1.Option("-p, --plain", "do not use formatting for output").hideHelp().default(false))
     .action(function (options, command) {
     if (!options.file && !options.input && !options.benchmark) {
-        (0, log_1.default)(constants_1.LOG_LEVEL.ERROR, "You must specify either a file, input, or a benchmark option", options.plain);
         command.help();
     }
 });

@@ -9,7 +9,7 @@ import { exit } from "node:process";
  */
 export function getAlgorithms(plain: boolean): string[] {
   try {
-    const files: string[] = fs.readdirSync("./algorithms");
+    const files: string[] = fs.readdirSync(__dirname + "/algorithms");
     return files.map((f: string) => f.split(".")[0]).filter((f: string) => {
       if (IGNORED_ALGORITHMS.includes(f)) {
         log(LOG_LEVEL.DEBUG, `Ignoring algorithm: ${f}`, plain);
@@ -59,7 +59,7 @@ export function findAlgorithm(
 
   try {
     // get all files in the algorithms directory
-    const files: string[] = fs.readdirSync("./algorithms");
+    const files: string[] = fs.readdirSync(__dirname + "/algorithms");
 
     if (!files.length) {
       log(LOG_LEVEL.ERROR, "No algorithms found", plain);
@@ -77,7 +77,7 @@ export function findAlgorithm(
     log(LOG_LEVEL.DEBUG, `Found algorithm: ${algorithm}`, plain);
 
     // return the default export of the file
-    return require(`./algorithms/${file}`).default;
+    return require(__dirname + `/algorithms/${file}`).default;
   } catch (error) {
     log(
       LOG_LEVEL.ERROR,

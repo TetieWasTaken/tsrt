@@ -10,7 +10,7 @@ import { exit } from "node:process";
 const algorithms = getAlgorithms(false);
 
 const program = new Command()
-  .version("1.0.3", "-v, --version", "output the current version")
+  .version("1.0.5", "-v, --version", "output the current version")
   .addOption(
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
@@ -62,11 +62,6 @@ const program = new Command()
     if (
       !options.file && !options.input && !options.benchmark
     ) {
-      log(
-        LOG_LEVEL.ERROR,
-        "You must specify either a file, input, or a benchmark option",
-        options.plain,
-      );
       command.help();
     }
   });

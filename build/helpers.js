@@ -15,7 +15,7 @@ var node_process_1 = require("node:process");
  */
 function getAlgorithms(plain) {
     try {
-        var files = fs.readdirSync("./algorithms");
+        var files = fs.readdirSync(__dirname + "/algorithms");
         return files.map(function (f) { return f.split(".")[0]; }).filter(function (f) {
             if (constants_1.IGNORED_ALGORITHMS.includes(f)) {
                 (0, log_1.default)(constants_1.LOG_LEVEL.DEBUG, "Ignoring algorithm: ".concat(f), plain);
@@ -54,7 +54,7 @@ function findAlgorithm(algorithm, plain) {
     (0, log_1.default)(constants_1.LOG_LEVEL.DEBUG, "Finding algorithm: ".concat(algorithm), plain);
     try {
         // get all files in the algorithms directory
-        var files = fs.readdirSync("./algorithms");
+        var files = fs.readdirSync(__dirname + "/algorithms");
         if (!files.length) {
             (0, log_1.default)(constants_1.LOG_LEVEL.ERROR, "No algorithms found", plain);
             (0, node_process_1.exit)(1);
@@ -67,7 +67,7 @@ function findAlgorithm(algorithm, plain) {
         }
         (0, log_1.default)(constants_1.LOG_LEVEL.DEBUG, "Found algorithm: ".concat(algorithm), plain);
         // return the default export of the file
-        return require("./algorithms/".concat(file)).default;
+        return require(__dirname + "/algorithms/".concat(file)).default;
     }
     catch (error) {
         (0, log_1.default)(constants_1.LOG_LEVEL.ERROR, "Could not find algorithm: ".concat(algorithm, " - ").concat(error.message), plain);
