@@ -1,4 +1,5 @@
 import { compare } from "../helpers";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Sort by comparing elements that are a certain distance apart and then reducing the distance
@@ -28,3 +29,13 @@ export default function shellSort(
 
   return arr;
 }
+
+export const algorithmData: Algorithm = {
+  name: "Shellsort",
+  complexity: Complexity.FOUR_THIRDS,
+  memoryUsage: MemoryUsage.CONSTANT,
+  stable: false,
+  inPlace: true,
+  description:
+    "Shellsort is an in-place comparison-based algorithm that sorts the elements by comparing elements that are a certain distance apart and then reducing the distance. (measuring actual complexity is difficult, may not be accurate)",
+};

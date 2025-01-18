@@ -1,6 +1,6 @@
 {
   "name": "tsrt",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "bin": {
     "tsrt": "./build/cli.js"
   },

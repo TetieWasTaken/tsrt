@@ -1,4 +1,5 @@
 import { compare } from "../helpers";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Sort by comparing elements that are a certain distance apart and then reducing the distance
@@ -26,3 +27,13 @@ export default function combSort(
 
   return arr;
 }
+
+export const algorithmData: Algorithm = {
+  name: "Comb sort",
+  complexity: Complexity.QUADRATIC,
+  memoryUsage: MemoryUsage.LINEAR,
+  stable: false,
+  inPlace: true,
+  description:
+    "Comb sort is an improved bubble sort algorithm that allows far-away elements to move faster towards their expected positions.",
+};

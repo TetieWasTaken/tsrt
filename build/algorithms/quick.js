@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.algorithmData = void 0;
 exports.default = quickSort;
 var helpers_1 = require("../helpers");
+var types_1 = require("./types");
 /**
  * Partition the array around the pivot element
  * @param arr the array to partition
@@ -42,3 +44,11 @@ function quickSort(arr, start, end) {
     }
     return arr;
 }
+exports.algorithmData = {
+    name: "Quicksort",
+    complexity: types_1.Complexity.LINEARITHMIC,
+    memoryUsage: types_1.MemoryUsage.LOGARITHMIC,
+    stable: false,
+    inPlace: true,
+    description: "Quicksort is a divide-and-conquer algorithm that selects a 'pivot' element and partitions the array into subarrays of elements less than and greater than the pivot, then recursively sorts the subarrays.",
+};

@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.algorithmData = void 0;
 exports.default = heapSort;
 var helpers_1 = require("../helpers");
+var types_1 = require("./types");
 /**
  * Heapify a subtree rooted with node i which is an index in arr[].
  * @param arr - the array to heapify
@@ -43,3 +45,11 @@ function heapSort(arr) {
     }
     return arr;
 }
+exports.algorithmData = {
+    name: "Heap sort",
+    complexity: types_1.Complexity.LINEARITHMIC,
+    memoryUsage: types_1.MemoryUsage.CONSTANT,
+    stable: false,
+    inPlace: true,
+    description: "Heap Sort is a comparison-based sorting algorithm that builds a heap from the input data and repeatedly extracts the maximum element to place at the end.",
+};

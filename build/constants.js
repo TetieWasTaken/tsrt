@@ -22,9 +22,4 @@ exports.LOG_LEVEL_ANSI_CODES = (_a = {},
     _a[LOG_LEVEL.INFO] = "\x1b[32m",
     _a[LOG_LEVEL.DEBUG] = "\x1b[34m",
     _a);
-exports.IGNORED_ALGORITHMS = [
-    "insertion",
-    "tim",
-    "selection",
-    "counting",
-];
+exports.IGNORED_ALGORITHMS = ["types", "insertion"];

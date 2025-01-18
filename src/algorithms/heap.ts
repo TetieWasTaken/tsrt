@@ -1,4 +1,5 @@
 import { compare } from "../helpers";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Heapify a subtree rooted with node i which is an index in arr[].
@@ -52,3 +53,13 @@ export default function heapSort<T extends string | number>(
 
   return arr;
 }
+
+export const algorithmData: Algorithm = {
+  name: "Heap sort",
+  complexity: Complexity.LINEARITHMIC,
+  memoryUsage: MemoryUsage.CONSTANT,
+  stable: false,
+  inPlace: true,
+  description:
+    "Heap Sort is a comparison-based sorting algorithm that builds a heap from the input data and repeatedly extracts the maximum element to place at the end.",
+};

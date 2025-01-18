@@ -1,5 +1,6 @@
 import { compare } from "../helpers";
 import insertionSort from "./insertion";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Merge function for block sort
@@ -70,3 +71,13 @@ export default function blockSort<T extends string | number>(arr: T[]): T[] {
 
   return arr;
 }
+
+export const algorithmData: Algorithm = {
+  name: "Block sort",
+  complexity: Complexity.LINEARITHMIC,
+  memoryUsage: MemoryUsage.LINEAR,
+  stable: true,
+  inPlace: true,
+  description:
+    "Block sort is a sorting algorithm that divides the input into blocks, sorts them using insertion sort, and then merges them using the merge sort algorithm.",
+};

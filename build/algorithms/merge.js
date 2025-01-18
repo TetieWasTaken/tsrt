@@ -9,9 +9,11 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.algorithmData = void 0;
 exports.merge = merge;
 exports.default = mergeSort;
 var helpers_1 = require("../helpers");
+var types_1 = require("./types");
 /**
  * Merge two sorted arrays
  * @param left the left array
@@ -50,3 +52,11 @@ function mergeSort(arr, minRun) {
     var right = mergeSort(arr.slice(mid), minRun);
     return merge(left, right);
 }
+exports.algorithmData = {
+    name: "Merge sort",
+    complexity: types_1.Complexity.LINEARITHMIC,
+    memoryUsage: types_1.MemoryUsage.LINEAR,
+    stable: true,
+    inPlace: false,
+    description: "Merge Sort is a divide-and-conquer algorithm that recursively splits the array into halves, sorts each half, and then merges the sorted halves.",
+};

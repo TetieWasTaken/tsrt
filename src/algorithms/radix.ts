@@ -1,7 +1,7 @@
 import { log } from "console";
 import { LOG_LEVEL } from "../constants";
-import quickSort from "./quick";
 import { exit } from "process";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Sort by distributing elements into buckets based on their digits
@@ -66,3 +66,13 @@ export default function radixSort(
 
   return [...numbers, ...strings];
 }
+
+export const algorithmData: Algorithm = {
+  name: "Radix sort",
+  complexity: Complexity.LINEAR,
+  memoryUsage: MemoryUsage.LINEAR,
+  stable: true,
+  inPlace: false,
+  description:
+    "Radix sort is a non-comparative sorting algorithm that sorts elements by distributing them into smaller buckets based on their digits (radix).",
+};

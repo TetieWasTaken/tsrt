@@ -4,6 +4,7 @@ exports.getAlgorithms = getAlgorithms;
 exports.convertToNumbers = convertToNumbers;
 exports.getRandoms = getRandoms;
 exports.findAlgorithm = findAlgorithm;
+exports.getAlgorithmData = getAlgorithmData;
 exports.compare = compare;
 var fs = require("node:fs");
 var log_1 = require("./log");
@@ -71,6 +72,22 @@ function findAlgorithm(algorithm, plain) {
     }
     catch (error) {
         (0, log_1.default)(constants_1.LOG_LEVEL.ERROR, "Could not find algorithm: ".concat(algorithm, " - ").concat(error.message), plain);
+        (0, node_process_1.exit)(1);
+    }
+}
+function getAlgorithmData() {
+    try {
+        var files = fs.readdirSync(__dirname + "/algorithms");
+        return files.map(function (f) {
+            var name = f.split(".")[0];
+            if (constants_1.IGNORED_ALGORITHMS.includes(name)) {
+                return null;
+            }
+            return (require(__dirname + "/algorithms/".concat(f)).algorithmData);
+        }).filter(function (a) { return a !== null; });
+    }
+    catch (error) {
+        (0, log_1.default)(constants_1.LOG_LEVEL.ERROR, "Failed to get algorithm data - ".concat(error.message), false);
         (0, node_process_1.exit)(1);
     }
 }

@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.algorithmData = void 0;
 exports.default = blockSort;
 var helpers_1 = require("../helpers");
 var insertion_1 = require("./insertion");
+var types_1 = require("./types");
 /**
  * Merge function for block sort
  * @param arr array of elements to be merged
@@ -50,3 +52,11 @@ function blockSort(arr) {
     }
     return arr;
 }
+exports.algorithmData = {
+    name: "Block sort",
+    complexity: types_1.Complexity.LINEARITHMIC,
+    memoryUsage: types_1.MemoryUsage.LINEAR,
+    stable: true,
+    inPlace: true,
+    description: "Block sort is a sorting algorithm that divides the input into blocks, sorts them using insertion sort, and then merges them using the merge sort algorithm.",
+};

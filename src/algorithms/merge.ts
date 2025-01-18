@@ -1,4 +1,5 @@
 import { compare } from "../helpers";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Merge two sorted arrays
@@ -44,3 +45,13 @@ export default function mergeSort<T extends string | number>(
 
   return merge(left, right);
 }
+
+export const algorithmData: Algorithm = {
+  name: "Merge sort",
+  complexity: Complexity.LINEARITHMIC,
+  memoryUsage: MemoryUsage.LINEAR,
+  stable: true,
+  inPlace: false,
+  description:
+    "Merge Sort is a divide-and-conquer algorithm that recursively splits the array into halves, sorts each half, and then merges the sorted halves.",
+};

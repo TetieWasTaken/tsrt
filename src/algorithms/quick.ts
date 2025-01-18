@@ -1,4 +1,5 @@
 import { compare } from "../helpers";
+import { type Algorithm, Complexity, MemoryUsage } from "./types";
 
 /**
  * Partition the array around the pivot element
@@ -51,3 +52,13 @@ export default function quickSort<T extends string | number>(
 
   return arr;
 }
+
+export const algorithmData: Algorithm = {
+  name: "Quicksort",
+  complexity: Complexity.LINEARITHMIC,
+  memoryUsage: MemoryUsage.LOGARITHMIC,
+  stable: false,
+  inPlace: true,
+  description:
+    "Quicksort is a divide-and-conquer algorithm that selects a 'pivot' element and partitions the array into subarrays of elements less than and greater than the pivot, then recursively sorts the subarrays.",
+};

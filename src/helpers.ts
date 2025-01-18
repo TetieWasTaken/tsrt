@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import log from "./log";
 import { IGNORED_ALGORITHMS, LOG_LEVEL } from "./constants";
 import { exit } from "node:process";
+import type { Algorithm } from "./algorithms/types";
 
 /**
  * Get a list of available algorithms
@@ -83,6 +84,27 @@ export function findAlgorithm(
       LOG_LEVEL.ERROR,
       `Could not find algorithm: ${algorithm} - ${error.message}`,
       plain,
+    );
+    exit(1);
+  }
+}
+
+export function getAlgorithmData(): Algorithm[] {
+  try {
+    const files: string[] = fs.readdirSync(__dirname + "/algorithms");
+    return files.map((f: string) => {
+      const name = f.split(".")[0];
+      if (IGNORED_ALGORITHMS.includes(name)) {
+        return null;
+      }
+
+      return (require(__dirname + `/algorithms/${f}`).algorithmData);
+    }).filter((a: Algorithm | null) => a !== null) as Algorithm[];
+  } catch (error) {
+    log(
+      LOG_LEVEL.ERROR,
+      `Failed to get algorithm data - ${error.message}`,
+      false,
     );
     exit(1);
   }

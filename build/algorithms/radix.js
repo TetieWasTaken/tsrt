@@ -9,10 +9,12 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.algorithmData = void 0;
 exports.default = radixSort;
 var console_1 = require("console");
 var constants_1 = require("../constants");
 var process_1 = require("process");
+var types_1 = require("./types");
 /**
  * Sort by distributing elements into buckets based on their digits
  * @param arr the array to sort
@@ -63,3 +65,11 @@ function radixSort(arr) {
     }
     return __spreadArray(__spreadArray([], numbers, true), strings, true);
 }
+exports.algorithmData = {
+    name: "Radix sort",
+    complexity: types_1.Complexity.LINEAR,
+    memoryUsage: types_1.MemoryUsage.LINEAR,
+    stable: true,
+    inPlace: false,
+    description: "Radix sort is a non-comparative sorting algorithm that sorts elements by distributing them into smaller buckets based on their digits (radix).",
+};

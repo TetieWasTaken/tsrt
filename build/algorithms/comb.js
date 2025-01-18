@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.algorithmData = void 0;
 exports.default = combSort;
 var helpers_1 = require("../helpers");
+var types_1 = require("./types");
 /**
  * Sort by comparing elements that are a certain distance apart and then reducing the distance
  * @param {(number|string)[]} arr - the array of numbers or strings to be sorted.
@@ -24,3 +26,11 @@ function combSort(arr) {
     }
     return arr;
 }
+exports.algorithmData = {
+    name: "Comb sort",
+    complexity: types_1.Complexity.QUADRATIC,
+    memoryUsage: types_1.MemoryUsage.LINEAR,
+    stable: false,
+    inPlace: true,
+    description: "Comb sort is an improved bubble sort algorithm that allows far-away elements to move faster towards their expected positions.",
+};

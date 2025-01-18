@@ -1,5 +1,5 @@
 import { Command, Option } from "@commander-js/extra-typings";
-import { convertToNumbers, getAlgorithms } from "./helpers";
+import { convertToNumbers, getAlgorithmData, getAlgorithms } from "./helpers";
 import { DEFAULT_ALGORITHM, LOG_LEVEL } from "./constants";
 import * as fs from "node:fs";
 import sort, { getData } from "./sort";
@@ -10,7 +10,7 @@ import { exit } from "node:process";
 const algorithms = getAlgorithms(false);
 
 const program = new Command()
-  .version("1.0.5", "-v, --version", "output the current version")
+  .version("1.1.0", "-v, --version", "output the current version")
   .addOption(
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
@@ -58,11 +58,35 @@ const program = new Command()
       "do not use formatting for output",
     ).hideHelp().default(false),
   )
+  .option("--info", "output available algorithms")
   .action((options, command) => {
     if (
-      !options.file && !options.input && !options.benchmark
+      !options.file && !options.input && !options.benchmark && !options.info
     ) {
       command.help();
+    }
+
+    if (options.info) {
+      const algorithmData = getAlgorithmData();
+
+      for (const algorithm of algorithmData) {
+        console.log("=".repeat(process.stdout.columns));
+        console.log(
+          `${algorithm.name} - ${algorithm.description}`,
+        );
+      }
+
+      console.log("=".repeat(process.stdout.columns));
+
+      console.table(algorithmData, [
+        "name",
+        "complexity",
+        "memoryUsage",
+        "stable",
+        "inPlace",
+      ]);
+
+      exit(0);
     }
   });
 

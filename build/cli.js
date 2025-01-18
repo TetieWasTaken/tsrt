@@ -11,7 +11,7 @@ var benchmark_1 = require("./benchmark");
 var node_process_1 = require("node:process");
 var algorithms = (0, helpers_1.getAlgorithms)(false);
 var program = new extra_typings_1.Command()
-    .version("1.0.4", "-v, --version", "output the current version")
+    .version("1.1.0", "-v, --version", "output the current version")
     .addOption(new extra_typings_1.Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(algorithms).default("none"))
     .addOption(new extra_typings_1.Option("-f, --file <file>", "the file to sort").conflicts("input"))
     .addOption(new extra_typings_1.Option("-i, --input <input>", "the input to sort").conflicts("file"))
@@ -21,9 +21,27 @@ var program = new extra_typings_1.Command()
     .addOption(new extra_typings_1.Option("--benchmark-iterations <iterations>", "the number of iterations to benchmark").hideHelp())
     .addOption(new extra_typings_1.Option("--benchmark-size <size>", "the size of the random list to benchmark").hideHelp())
     .addOption(new extra_typings_1.Option("-p, --plain", "do not use formatting for output").hideHelp().default(false))
+    .option("--info", "output available algorithms")
     .action(function (options, command) {
-    if (!options.file && !options.input && !options.benchmark) {
+    if (!options.file && !options.input && !options.benchmark && !options.info) {
         command.help();
+    }
+    if (options.info) {
+        var algorithmData = (0, helpers_1.getAlgorithmData)();
+        for (var _i = 0, algorithmData_1 = algorithmData; _i < algorithmData_1.length; _i++) {
+            var algorithm = algorithmData_1[_i];
+            console.log("=".repeat(process.stdout.columns));
+            console.log("".concat(algorithm.name, " - ").concat(algorithm.description));
+        }
+        console.log("=".repeat(process.stdout.columns));
+        console.table(algorithmData, [
+            "name",
+            "complexity",
+            "memoryUsage",
+            "stable",
+            "inPlace",
+        ]);
+        (0, node_process_1.exit)(0);
     }
 });
 try {
