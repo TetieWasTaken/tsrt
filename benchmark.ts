@@ -2,11 +2,31 @@ import { findAlgorithm, getRandoms } from "./helpers";
 import { hrtime } from "node:process";
 import log from "./log";
 import { LOG_LEVEL } from "./constants";
+import readline from "readline";
+
+function updateProgressBar(
+  algorithm: string,
+  iteration: number,
+  totalIterations: number,
+  totalAlgorithms: number,
+  currentAlgorithm: number,
+) {
+  const barLength = 40;
+  const filledLength = Math.round((barLength * iteration) / totalIterations);
+  const bar = "\x1b[32m█".repeat(filledLength) +
+    "\x1b[0m-".repeat(barLength - filledLength);
+
+  readline.cursorTo(process.stdout, 0);
+  process.stdout.clearLine(0);
+  process.stdout.write(
+    `\x1b[36mAlgorithm: ${algorithm}\x1b[0m (${currentAlgorithm}/${totalAlgorithms}) | \x1b[33mIteration: ${iteration}/${totalIterations}\x1b[0m | Progress: [${bar}\x1b[0m]`,
+  );
+}
 
 export function bench(
   algorithms: string[],
   iterations: number = 15,
-  size: number = 5000,
+  size: number = 10000,
 ) {
   const randoms = getRandoms(size);
 
@@ -18,7 +38,6 @@ export function bench(
   );
 
   const results = algorithms.map((algorithm) => {
-    log(LOG_LEVEL.INFO, `Benchmarking algorithm: ${algorithm}`);
     const sort = findAlgorithm(algorithm);
 
     let totalTime = 0n;
@@ -27,6 +46,13 @@ export function bench(
     const times: bigint[] = [];
 
     for (let i = 0; i < iterations; i++) {
+      updateProgressBar(
+        algorithm,
+        i + 1,
+        iterations,
+        algorithms.length,
+        algorithms.indexOf(algorithm) + 1,
+      );
       const start = hrtime.bigint();
       sort([...randoms]);
       const end = hrtime.bigint();
@@ -48,8 +74,10 @@ export function bench(
     // median
     times.sort((a, b) => Number(a - b));
     const medianTime = times.length % 2 === 0
-      ? (Number(times[times.length / 2 - 1] + times[times.length / 2]) / 2) /
-        1e6
+      ? (Number(
+        times[times.length / 2 - 1] + BigInt(Number(times[times.length / 2])),
+      ) /
+        2) / 1e6
       : Number(times[Math.floor(times.length / 2)]) / 1e6;
 
     // variance/std deviation
@@ -70,6 +98,10 @@ export function bench(
 
   // sort by average time
   results.sort((a, b) => a.averageTime - b.averageTime);
+
+  // clear progress bar
+  readline.cursorTo(process.stdout, 0);
+  process.stdout.clearLine(0);
 
   console.table(results.map((result) => ({
     Algorithm: result.algorithm,
