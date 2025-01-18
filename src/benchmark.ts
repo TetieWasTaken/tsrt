@@ -2,7 +2,7 @@ import { findAlgorithm, getRandoms } from "./helpers";
 import { hrtime } from "node:process";
 import log from "./log";
 import { LOG_LEVEL } from "./constants";
-import readline from "readline";
+import * as readline from "node:readline";
 import { stdout } from "node:process";
 
 function updateProgressBar(
@@ -33,6 +33,10 @@ export function bench(
   // todo: also iterate through different random lists, as another iteration
   const randoms = getRandoms(size);
 
+  if (size > 120000) {
+    algorithms = algorithms.filter((algorithm) => algorithm !== "radix");
+  }
+
   log(
     LOG_LEVEL.INFO,
     `Benchmarking ${
@@ -44,9 +48,9 @@ export function bench(
   const results = algorithms.map((algorithm) => {
     const sort = findAlgorithm(algorithm, plain);
 
-    let totalTime = 0n;
+    let totalTime = BigInt(0);
     let minTime = BigInt(Number.MAX_SAFE_INTEGER);
-    let maxTime = 0n;
+    let maxTime = BigInt(Number.MIN_SAFE_INTEGER);
     const times: bigint[] = [];
 
     for (let i = 0; i < iterations; i++) {

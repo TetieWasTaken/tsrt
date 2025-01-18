@@ -1,4 +1,4 @@
-import mergeSort, { merge } from "./merge.ts";
+import mergeSort, { merge } from "./merge";
 
 /**
  * Find runs in the array

@@ -1,0 +1,17 @@
+{
+  "name": "tsrt",
+  "version": "1.0.3",
+  "bin": {
+    "tsrt": "./build/cli.js"
+  },
+  "scripts": {
+    "clear": "rm -rf ./build",
+    "compile": "tsc --outDir ./build",
+    "shebang": "echo '#!/usr/bin/env node' | cat - ./build/cli.js > temp && mv temp ./build/cli.js",
+    "build": "npm run clear && npm run compile && npm run shebang",
+    "dev": "npx tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@commander-js/extra-typings": "^13.0.0"
+  }
+}

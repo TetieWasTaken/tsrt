@@ -1,7 +1,7 @@
 import { Command, Option } from "@commander-js/extra-typings";
 import { convertToNumbers, getAlgorithms } from "./helpers";
 import { DEFAULT_ALGORITHM, LOG_LEVEL } from "./constants";
-import fs from "fs";
+import * as fs from "node:fs";
 import sort, { getData } from "./sort";
 import log from "./log";
 import { bench } from "./benchmark";
@@ -10,7 +10,7 @@ import { exit } from "node:process";
 const algorithms = getAlgorithms(false);
 
 const program = new Command()
-  .version("0.1.0", "-v, --version", "output the current version")
+  .version("1.0.3", "-v, --version", "output the current version")
   .addOption(
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
@@ -100,9 +100,17 @@ try {
       ? DEFAULT_ALGORITHM
       : options.algorithm;
 
-    const input = options.file
-      ? getData(options.file, options.plain)
-      : options.input?.split(",");
+    let input: string[] | undefined;
+    if (options.file) {
+      input = getData(options.file, options.plain);
+    } else if (options.input) {
+      if (options.input.includes(",")) {
+        input = options.input.split(",");
+      } else {
+        log(LOG_LEVEL.ERROR, "Unsupported input format", options.plain);
+        exit(1);
+      }
+    }
 
     if (!input) {
       log(
@@ -117,6 +125,11 @@ try {
     const sorted = sort(algorithm, convertedInput, options.plain);
 
     if (options.output) {
+      log(
+        LOG_LEVEL.INFO,
+        `Storing result in ${options.output}...`,
+        options.plain,
+      );
       fs.writeFileSync(
         options.output,
         options.plain ? sorted.join(",") : sorted.join("\n"),

@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "node:fs";
 import log from "./log";
 import { IGNORED_ALGORITHMS, LOG_LEVEL } from "./constants";
 import { exit } from "node:process";
@@ -89,7 +89,10 @@ export function findAlgorithm(
 }
 
 /**
- * Custom comparator for mixed strings and numbers
+ * Compare two string/number values
+ * @param a value 1
+ * @param b value 2
+ * @returns -1 if a < b, 0 if a === b, 1 if a > b
  */
 export function compare(a: string | number, b: string | number): number {
   if (typeof a === "number" && typeof b === "number") {
@@ -98,5 +101,5 @@ export function compare(a: string | number, b: string | number): number {
   if (typeof a === "string" && typeof b === "string") {
     return a.localeCompare(b);
   }
-  return typeof a === "number" ? -1 : 1; // Numbers come before strings
+  return typeof a === "number" ? -1 : 1; // numbers come before strings
 }

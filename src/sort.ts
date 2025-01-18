@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "node:fs";
 import log from "./log";
 import { LOG_LEVEL } from "./constants";
 import { hrtime } from "node:process";
@@ -46,8 +46,6 @@ export default function sort(
   input: (string | number)[],
   plain: boolean,
 ): string[] {
-  log(LOG_LEVEL.INFO, `Sorting ${input.length} elements`, plain);
-
   let sorted: (string | number)[] = [];
   const startPerf = hrtime.bigint();
   try {

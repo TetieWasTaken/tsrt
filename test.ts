@@ -1,10 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert";
 import { execSync } from "child_process";
-import fs from "fs";
+import * as fs from "node:fs";
 import path from "path";
-import { getAlgorithms } from "./helpers";
-import { getData } from "./sort";
+import { getAlgorithms } from "./src/helpers";
 
 const cliPath = path.resolve("./cli.ts");
 

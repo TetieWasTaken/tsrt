@@ -1,3 +1,8 @@
+import { log } from "console";
+import { LOG_LEVEL } from "../constants";
+import quickSort from "./quick";
+import { exit } from "process";
+
 /**
  * Sort by distributing elements into buckets based on their digits
  * @param arr the array to sort
@@ -7,13 +12,21 @@ export default function radixSort(
   arr: Array<number | string>,
 ): Array<number | string> {
   if (arr.length === 0) return arr;
+  if (arr.length > 120000) {
+    log(
+      LOG_LEVEL.ERROR,
+      "Array too large for radix sort. Please use quick sort or reduce the size of the array.",
+      false,
+    );
+    exit(1);
+  }
 
-  // Separate numbers and strings
+  // separate numbers and strings
   const numbers = arr.filter((item) => typeof item === "number") as number[];
   const strings = arr.filter((item) => typeof item === "string") as string[];
 
   if (numbers.length > 0) {
-    let max = Math.max(...numbers);
+    const max = Math.max(...numbers);
     const maxDigits = Math.floor(Math.log10(max)) + 1;
 
     for (let i = 0; i < maxDigits; i++) {

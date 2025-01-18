@@ -1,4 +1,4 @@
-// block is stable and is overall the best afaik
+// block isn't the fastest, but most consistent and stable
 export const DEFAULT_ALGORITHM: string = "block";
 export enum LOG_LEVEL {
   ERROR = "ERROR",
