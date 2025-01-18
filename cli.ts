@@ -71,7 +71,7 @@ try {
   exit(1);
 }
 
-let options;
+let options: ReturnType<typeof program.opts>;
 
 try {
   options = program.opts();

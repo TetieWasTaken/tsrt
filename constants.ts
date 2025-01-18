@@ -5,6 +5,7 @@ export enum LOG_LEVEL {
   DEBUG = "DEBUG",
   ERROR = "ERROR",
 }
+export const SELECTED_LOG_LEVEL: LOG_LEVEL = LOG_LEVEL.INFO;
 
 export const LOG_LEVEL_ANSI_CODES: { [key in LOG_LEVEL]: string } = {
   [LOG_LEVEL.INFO]: "\x1b[32m",
