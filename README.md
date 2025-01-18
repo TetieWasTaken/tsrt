@@ -1,4 +1,4 @@
-# tsrt
+# [tsrt](https://www.npmjs.com/package/tsrt)
  
 `tsrt` is a command line implementation of multiple sorting algorithms in TypeScript.
 
@@ -121,7 +121,7 @@ npm run build
 # to run
 node build/cli.js -v
 ```
-##### tests are not available via tsc.
+###### tests are not available via tsc.
 
 ## License & Disclaimer
 I cannot guarantee the correctness of the algorithms implemented in this project. Use at your own risk.
