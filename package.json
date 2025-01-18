@@ -8,8 +8,7 @@
     "clear": "rm -rf ./build",
     "compile": "tsc --outDir ./build",
     "shebang": "echo '#!/usr/bin/env node' | cat - ./build/cli.js > temp && mv temp ./build/cli.js",
-    "build": "npm run clear && npm run compile && npm run shebang",
-    "dev": "npx tsx src/cli.ts"
+    "build": "npm run clear && npm run compile && npm run shebang"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^13.0.0"
