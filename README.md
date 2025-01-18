@@ -1,11 +1,12 @@
 # [tsrt](https://www.npmjs.com/package/tsrt)
+<img src="https://img.shields.io/npm/dm/tsrt" alt="npm downloads" />
  
-`tsrt` is a command line implementation of multiple sorting algorithms in TypeScript.
+`tsrt` is a command line implementation of multiple sorting algorithms in TypeScript available on [npm](https://www.npmjs.com/package/tsrt).
 
 ## Installation
 
 ```bash
-npm install -g tsrt
+npm install -g tsrt # you might have to use sudo, depending on your system
 # check if the installation was successful
 tsrt --version
 tsrt -i 3,1,2,5,4
