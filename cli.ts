@@ -9,7 +9,7 @@ import { bench } from "./benchmark";
 const algorithms = getAlgorithms();
 
 const program = new Command()
-  .version("0.0.1", "-v, --version", "output the current version")
+  .version("0.1.0", "-v, --version", "output the current version")
   .addOption(
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
@@ -81,5 +81,7 @@ if (options.benchmark) {
 
   if (options.output) {
     fs.writeFileSync(options.output, sorted.join("\n"));
+  } else {
+    console.log(sorted.join("\n"));
   }
 }
