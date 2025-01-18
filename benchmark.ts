@@ -3,6 +3,7 @@ import { hrtime } from "node:process";
 import log from "./log";
 import { LOG_LEVEL } from "./constants";
 import readline from "readline";
+import { stdout } from "node:process";
 
 function updateProgressBar(
   algorithm: string,
@@ -16,9 +17,9 @@ function updateProgressBar(
   const bar = "\x1b[32m█".repeat(filledLength) +
     "\x1b[0m-".repeat(barLength - filledLength);
 
-  readline.cursorTo(process.stdout, 0);
-  process.stdout.clearLine(0);
-  process.stdout.write(
+  readline.cursorTo(stdout, 0);
+  stdout.clearLine(0);
+  stdout.write(
     `\x1b[36mAlgorithm: ${algorithm}\x1b[0m (${currentAlgorithm}/${totalAlgorithms}) | \x1b[33mIteration: ${iteration}/${totalIterations}\x1b[0m | Progress: [${bar}\x1b[0m]`,
   );
 }
@@ -27,6 +28,7 @@ export function bench(
   algorithms: string[],
   iterations: number = 15,
   size: number = 10000,
+  plain: boolean = false,
 ) {
   // todo: also iterate through different random lists, as another iteration
   const randoms = getRandoms(size);
@@ -36,6 +38,7 @@ export function bench(
     `Benchmarking ${
       algorithms.join(", ")
     } with ${size} elements and ${iterations} iterations`,
+    plain,
   );
 
   const results = algorithms.map((algorithm) => {
@@ -65,6 +68,7 @@ export function bench(
       log(
         LOG_LEVEL.DEBUG,
         `Iteration ${i + 1} took ${Number(iterationTime) / 1e6}ms`,
+        plain,
       );
     }
 
@@ -101,8 +105,8 @@ export function bench(
   results.sort((a, b) => a.averageTime - b.averageTime);
 
   // clear progress bar
-  readline.cursorTo(process.stdout, 0);
-  process.stdout.clearLine(0);
+  readline.cursorTo(stdout, 0);
+  stdout.clearLine(0);
 
   console.table(results.map((result) => ({
     Algorithm: result.algorithm,

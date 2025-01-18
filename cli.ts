@@ -93,6 +93,7 @@ try {
       options.algorithm == "none" ? algorithms : [options.algorithm],
       Number(options.benchmarkIterations) || undefined,
       Number(options.benchmarkSize) || undefined,
+      options.plain,
     );
   } else {
     const algorithm = options.algorithm == "none"
@@ -101,7 +102,7 @@ try {
 
     const input = options.file
       ? getData(options.file, options.plain)
-      : options.input.split(",").map((num: string) => parseInt(num, 10));
+      : options.input?.split(",").map((num: string) => parseInt(num, 10)) || [];
     const sorted = sort(algorithm, input, options.plain);
 
     if (options.output) {
