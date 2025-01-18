@@ -63,25 +63,42 @@ const program = new Command()
     }
   });
 
-program.parse();
+try {
+  program.parse();
+} catch (error) {
+  log(LOG_LEVEL.ERROR, error.message);
+  process.exit(1);
+}
 
-const options = program.opts();
+let options;
 
-if (options.benchmark) {
-  bench(
-    options.algorithm == "none" ? algorithms : [options.algorithm],
-    Number(options.benchmarkIterations) || undefined,
-    Number(options.benchmarkSize) || undefined,
-  );
-} else {
-  const algorithm = options.algorithm == "none"
-    ? DEFAULT_ALGORITHM
-    : options.algorithm;
-  const sorted = sort(algorithm, options.file || options.input);
+try {
+  options = program.opts();
+} catch (error) {
+  log(LOG_LEVEL.ERROR, error.message);
+  process.exit(1);
+}
 
-  if (options.output) {
-    fs.writeFileSync(options.output, sorted.join("\n"));
+try {
+  if (options.benchmark) {
+    bench(
+      options.algorithm == "none" ? algorithms : [options.algorithm],
+      Number(options.benchmarkIterations) || undefined,
+      Number(options.benchmarkSize) || undefined,
+    );
   } else {
-    console.log(sorted.join("\n"));
+    const algorithm = options.algorithm == "none"
+      ? DEFAULT_ALGORITHM
+      : options.algorithm;
+    const sorted = sort(algorithm, options.file || options.input);
+
+    if (options.output) {
+      fs.writeFileSync(options.output, sorted.join("\n"));
+    } else {
+      console.log(sorted.join("\n"));
+    }
   }
+} catch (error) {
+  log(LOG_LEVEL.ERROR, error.message);
+  process.exit(1);
 }

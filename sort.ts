@@ -14,7 +14,7 @@ function getData(file: string): string {
   try {
     fs.accessSync(file, fs.constants.R_OK);
   } catch (e) {
-    log(LOG_LEVEL.ERROR, `Could not read file: ${file}`);
+    log(LOG_LEVEL.ERROR, `Could not access file: ${file}`);
     process.exit(1);
   }
 
@@ -43,8 +43,14 @@ export default function sort(algorithm: string, file: string): string[] {
 
   log(LOG_LEVEL.INFO, `Sorting ${arr.length} elements`);
 
+  let sorted: number[] = [];
   const startPerf = hrtime.bigint();
-  const sorted: number[] = findAlgorithm(algorithm)(arr);
+  try {
+    sorted = findAlgorithm(algorithm)(arr);
+  } catch (error) {
+    log(LOG_LEVEL.ERROR, `Could not run algorithm: ${algorithm}`);
+    process.exit(1);
+  }
   const endPerf = hrtime.bigint() - startPerf;
 
   log(
