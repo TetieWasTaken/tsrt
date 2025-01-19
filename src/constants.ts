@@ -19,3 +19,5 @@ export const LOG_LEVEL_ANSI_CODES: { [key in LOG_LEVEL]: string } = {
 };
 
 export const IGNORED_ALGORITHMS: string[] = ["types", "insertion"];
+
+export const VERSION = "1.1.5";

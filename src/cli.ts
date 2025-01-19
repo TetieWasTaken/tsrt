@@ -1,6 +1,6 @@
 import { Command, Option } from "@commander-js/extra-typings";
 import { convertToNumbers, getAlgorithmData, getAlgorithms } from "./helpers";
-import { DEFAULT_ALGORITHM, LOG_LEVEL } from "./constants";
+import { DEFAULT_ALGORITHM, LOG_LEVEL, VERSION } from "./constants";
 import * as fs from "node:fs";
 import sort, { getData } from "./sort";
 import log from "./log";
@@ -10,7 +10,7 @@ import { exit } from "node:process";
 const algorithms = getAlgorithms(false);
 
 const program = new Command()
-  .version("1.1.5", "-v, --version", "output the current version")
+  .version(VERSION, "-v, --version", "output the current version")
   .addOption(
     new Option("-a, --algorithm <algorithm>", "the algorithm to use").choices(
       algorithms,
