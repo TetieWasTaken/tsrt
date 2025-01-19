@@ -97,9 +97,9 @@ $ tsrt --info
 ## Local development & testing
 ```bash
 # clone the repository
-gh repo clone TetieWasTaken/sort-ts
+gh repo clone TetieWasTaken/tsrt
 # or
-git clone https://github.com/TetieWasTaken/sort-ts.git
+git clone https://github.com/TetieWasTaken/tsrt.git
 ```
 
 ```bash

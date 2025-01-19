@@ -1,16 +1,27 @@
 {
-  "name": "tsrt",
-  "version": "1.1.4",
+  "author": {
+    "name": "Tetie",
+    "url": "https://github.com/TetieWasTaken"
+  },
   "bin": {
     "tsrt": "./build/cli.js"
   },
-  "scripts": {
-    "clear": "rm -rf ./build",
-    "compile": "tsc --outDir ./build",
-    "shebang": "echo '#!/usr/bin/env node' | cat - ./build/cli.js > temp && mv temp ./build/cli.js",
-    "build": "npm run clear && npm run compile && npm run shebang"
+  "bugs": {
+    "url": "https://github.com/TetieWasTaken/tsrt/issues"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^13.0.0"
-  }
+  },
+  "description": "tsrt is a command line implementation of multiple sorting algorithms in TypeScript.",
+  "homepage": "https://github.com/TetieWasTaken/tsrt#readme",
+  "license": "Unlicense",
+  "name": "tsrt",
+  "repository": "github:TetieWasTaken/tsrt",
+  "scripts": {
+    "build": "npm run clear && npm run compile && npm run shebang",
+    "clear": "rm -rf ./build",
+    "compile": "tsc --outDir ./build",
+    "shebang": "echo '#!/usr/bin/env node' | cat - ./build/cli.js > temp && mv temp ./build/cli.js"
+  },
+  "version": "1.1.5"
 }
